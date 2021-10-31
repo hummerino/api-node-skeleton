@@ -3,6 +3,7 @@ import { addUser } from "../repositories/user.repository";
 import { getUserByEmail } from "../repositories/user.repository";
 import { User, UserRegiser } from '../models/user.models';
 import {getHashedPassword, generateAuthToken} from '../utils/crypto.utils';
+import { setToken } from "../utils/auth.utils";
 
 
 
@@ -11,8 +12,6 @@ import {getHashedPassword, generateAuthToken} from '../utils/crypto.utils';
  */
 export const UserRouter = express.Router();
 
-// This will hold the users and authToken related to users
-const authTokens = [];
 
 
 UserRouter.post('/token', async (req: Request, res: Response) => {
@@ -33,8 +32,7 @@ UserRouter.post('/token', async (req: Request, res: Response) => {
 
     const authToken = generateAuthToken();
 
-    // Store authentication token
-    authTokens[authToken] = user;
+    setToken( authToken, user );
 
     // Setting the auth token in cookies
     res.cookie('AuthToken', authToken);
@@ -79,8 +77,3 @@ UserRouter.post('/register', async (req: Request, res: Response) => {
     }
     
 });
-
-
-
-
-

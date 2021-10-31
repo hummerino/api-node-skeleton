@@ -1,10 +1,13 @@
 import express, { Request, Response } from "express";
+import { tokenRequired } from "../utils/auth.utils";
 import * as ArticleRepository from "../repositories/article.repository";
 
 /*
  * Router Definition
  */
 export const ArticleRouter = express.Router();
+
+ArticleRouter.use( tokenRequired );
 
 /*
  *
