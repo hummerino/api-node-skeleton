@@ -1,11 +1,15 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import * as dotenv from 'dotenv';
+
 const cookieParser = require('cookie-parser');
 
 import * as bodyParser from 'body-parser';
 
 import { Routers, IRouter } from './routers/router.module';
+
+dotenv.config();
 
 const app : express.Application = express();
 
