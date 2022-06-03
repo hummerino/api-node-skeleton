@@ -11,7 +11,7 @@ import {getHashedPassword, generateAuthToken} from '../utils/crypto.utils';
 export const UserRouter = express.Router();
 
 // This will hold the users and authToken related to users
-const authTokens = [];
+export const authTokens: { [name: string] : User } = {};
 
 
 UserRouter.post('/token', async (req: Request, res: Response) => {

@@ -37,6 +37,22 @@ export abstract class MongoDB<T> {
     /*
     *
     */
+    public async getById( id: string ): Promise<T> {
+        try{
+            const client = await this.getNewClient();
+            const db = client.db(process.env.CONNECTION_DB);
+            const result = await db.collection<T>(this.collection).findOne( { '_id' : ObjectId(id) } );
+            delete result._id;
+            return { id, ...result } as T;
+        }catch ( error ) {
+            console.log( error );
+            throw error;
+        }
+    }
+
+    /*
+    *
+    */
     public async getDocuments( filter: Filter<T> = null ): Promise<T[]> {
         let docs: WithId<T>[];
 

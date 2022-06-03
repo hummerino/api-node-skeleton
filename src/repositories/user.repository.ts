@@ -3,23 +3,6 @@ import { User } from "../models/user.models"
 import { Course } from "../models/course.model";
 import { MongoDB } from "../utils/mongodb.utils";
 
-const users: User[] = [
-    {
-      firstName: "simone",
-      lastName: "golia",
-      email: "simo@simo.it",
-      password: "Ylil4Ot3KRHU+SvltdsOFFEe2+AdHQ3dHVosuduaVro=",
-      id: "29388573-81e1-4a12-88e0-97145b69f76c"
-    }
-]
-
-
-export const getUser = () : User[] => users;
-
-export const getUserById = ( id: string ) : User => users?.find( ( user: User ) => user.id === id );
-
-
-
 
 
 export class UserRepository extends MongoDB<User>  {
