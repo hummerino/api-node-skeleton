@@ -31,7 +31,7 @@ app.use(bodyParser.json({
 app.use(function (req, res, next) {
     switch( req.originalUrl ) {
         case '/user/token' : 
-        case '/user/token' : 
+        case '/user/register' : 
             next();
             return;
     }
