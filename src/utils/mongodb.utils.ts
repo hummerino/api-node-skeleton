@@ -12,9 +12,10 @@ export abstract class MongoDB<T> {
     /*
     *
     */
-    private async getNewClient(){
+    private async getDBConnection(){
         const client: MongoClient = new MongoClient(process.env.CONNECTION_STRING);
-        return client.connect();
+        const connection = await client.connect();
+        return connection.db(process.env.CONNECTION_DB);
     }
 
     /*
@@ -22,8 +23,7 @@ export abstract class MongoDB<T> {
     */
     public async insertDocument( doc: T ): Promise<string> {
         try{
-            const client = await this.getNewClient();
-            const db = client.db(process.env.CONNECTION_DB);
+            const db = await this.getDBConnection();
             const result = await db.collection<T>(this.collection).insertOne( doc as OptionalUnlessRequiredId<T> );
             const newId: string = result.insertedId?.toString();
             this.updateDocument( newId, doc );
@@ -39,8 +39,7 @@ export abstract class MongoDB<T> {
     */
     public async getById( id: string ): Promise<T> {
         try{
-            const client = await this.getNewClient();
-            const db = client.db(process.env.CONNECTION_DB);
+            const db = await this.getDBConnection();
             const result = await db.collection<T>(this.collection).findOne( { '_id' : ObjectId(id) } );
             delete result._id;
             return { id, ...result } as T;
@@ -57,8 +56,7 @@ export abstract class MongoDB<T> {
         let docs: WithId<T>[];
 
         try{
-            const client = await this.getNewClient();
-            const db = client.db(process.env.CONNECTION_DB);
+            const db = await this.getDBConnection();
             docs = await db.collection<T>(this.collection).find(filter).toArray();
             return docs.map( ( el: WithId<T> ) =>
                 {
@@ -80,8 +78,7 @@ export abstract class MongoDB<T> {
     public async updateDocument( id: string, value: T ): Promise<boolean> {
 
         try{
-            const client = await this.getNewClient();
-            const db = client.db(process.env.CONNECTION_DB);
+            const db = await this.getDBConnection();
             const updateResult = await db.collection<T>( this.collection ).updateOne( 
                 { "_id" : ObjectId( id ) }, 
                 { $set:{ id, ...value } } 
@@ -99,8 +96,7 @@ export abstract class MongoDB<T> {
     public async deleteDocument( id: string ): Promise<boolean> {
         
         try{
-            const client = await this.getNewClient();
-            const db = client.db(process.env.CONNECTION_DB);
+            const db = await this.getDBConnection();
             const updateResult = await db.collection<T>( this.collection ).deleteOne(
                 {
                     _id: ObjectId( id )

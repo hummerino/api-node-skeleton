@@ -9,7 +9,7 @@ const crypto = require('crypto');
  * @param {string} password - Initial password.
  * @returns Hashed password.
  */
-export const getHashedPassword = ( password: string ) => {
+export const getHashedPassword = ( password: string ): string => {
     const sha256 = crypto.createHash('sha256');
     const hash = 
         sha256.update(password)
@@ -18,6 +18,9 @@ export const getHashedPassword = ( password: string ) => {
 }
 
 
-export const generateAuthToken = () => {
-    return crypto.randomBytes(30).toString('hex');
-}
+
+
+/*
+*
+*/
+export const generateAuthToken = (): string => crypto.randomBytes(30).toString('hex');

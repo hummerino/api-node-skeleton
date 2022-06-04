@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import helmet from "helmet";
+// import helmet from "helmet";
 import * as dotenv from 'dotenv';
 
 const cookieParser = require('cookie-parser');
@@ -14,13 +14,28 @@ dotenv.config();
 
 const app : express.Application = express();
 
-/*app.use(cors);
-app.use(helmet);*/
+/*
+*   CORS
+*/
+var corsOptions = {
+    origin: '*',
+    optionsSuccessStatus: 200,
+  }
+app.use(cors(corsOptions));
+
+/*
+*   JSON
+*/
 app.use(express.json());
 
-// To parse cookies from the HTTP Request
+/*
+*   To parse cookies from the HTTP Request
+*/
 app.use(cookieParser());
 
+/*
+*   Body parser
+*/
 app.use(bodyParser.json({
     limit: '50mb',
     verify(req: any, res, buf, encoding) {
@@ -28,7 +43,11 @@ app.use(bodyParser.json({
     }
 }));
 
+/*
+*   Auth Middleware
+*/
 app.use(function (req, res, next) {
+    console.log( req.originalUrl )
     switch( req.originalUrl ) {
         case '/user/token' : 
         case '/user/register' : 
@@ -58,6 +77,12 @@ app.use(function (req, res, next) {
     next();
 });
 
+/*
+*   Generate Route
+*/
 Routers.forEach( ( r : IRouter ) => app.use( r.Prefix, r.Router ) )
 
+/*
+*  
+*/
 export {app};
