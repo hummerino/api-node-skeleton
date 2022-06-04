@@ -73,9 +73,10 @@ UserRouter.post('/register', async (req: Request, res: Response) => {
 
         // Store user into the database if you are using one
         const newUser: User = await userRepository.addUser( { ...req.body, password: hashedPassword })
-
+        const { firstName, lastName, id: userId } = newUser;
+    
         res.status(200)
-           .send( newUser );
+           .send( { email, firstName, lastName, userId  } );
     
 });
 
