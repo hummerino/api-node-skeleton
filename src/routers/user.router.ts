@@ -11,7 +11,7 @@ import {getHashedPassword, generateAuthToken} from '../utils/crypto.utils';
 export const UserRouter = express.Router();
 
 // This will hold the users and authToken related to users
-export const authTokens: { [name: string] : User } = {};
+export const authTokens: { [name: string] : { user: User, expirationToken: Date } } = {};
 
 
 UserRouter.post('/token', async (req: Request, res: Response) => {
@@ -34,7 +34,9 @@ UserRouter.post('/token', async (req: Request, res: Response) => {
     const authToken = generateAuthToken();
 
     // Store authentication token
-    authTokens[authToken] = user;
+    const expirationToken = new Date();
+    expirationToken.setDate( expirationToken.getDate() + 1 );
+    authTokens[authToken] = { user, expirationToken } ;
 
     // Setting the auth token in cookies
     res.cookie('AuthToken', authToken);
@@ -46,7 +48,8 @@ UserRouter.post('/token', async (req: Request, res: Response) => {
            email, 
            firstName,
            lastName, 
-           token : authToken
+           token : authToken,
+           expirationToken 
        });
     
 });

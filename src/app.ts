@@ -73,6 +73,11 @@ app.use(function (req, res, next) {
         res.status(401).send('Not Authorized');
         return;
     }
+
+    if( authTokens[token].expirationToken?.getTime() < new Date().getTime() ) {
+        res.status(401).send('Token expired');
+        return;
+    }
     
     next();
 });
