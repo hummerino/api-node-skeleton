@@ -81,7 +81,7 @@ export abstract class MongoDB<T> {
             const db = await this.getDBConnection();
             const updateResult = await db.collection<T>( this.collection ).updateOne( 
                 { "_id" : ObjectId( id ) }, 
-                { $set:{ id, ...value } } 
+                { $set:{ ...value, id } } 
             );
             return updateResult.modifiedCount > 0;
         }catch ( error ) {
