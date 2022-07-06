@@ -31,8 +31,8 @@ PaymentMethodRouter.get("/:userId", async (req: Request, res: Response) => {
 PaymentMethodRouter.post("/", async (req: Request, res: Response) => {
   try {
     const repo = new PaymentMethodRepository();
-    const item: string = await repo.insertDocument(req.body);
-    res.status(200).send(item);
+    const id: string = await repo.insertDocument(req.body);
+    res.status(200).send({id});
   } catch (e) {
     res.status(404).send(e.message);
   }
@@ -49,8 +49,8 @@ PaymentMethodRouter.delete("/:id", async (req: Request, res: Response) => {
       return;
     }
     const repo = new PaymentMethodRepository();
-    const item: boolean = await repo.deleteDocument(id);
-    res.status(200).send(item);
+    const result: boolean = await repo.deleteDocument(id);
+    res.status(200).send({result});
   } catch (e) {
     res.status(404).send(e.message);
   }

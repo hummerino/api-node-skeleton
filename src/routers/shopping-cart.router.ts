@@ -26,8 +26,8 @@ ShoppingCartRouter.get("/:userId", async (req: Request, res: Response) => {
 ShoppingCartRouter.post("/", async (req: Request, res: Response) => {
   try {
     const repo = new ShoppingCartRepository();
-    const item: string = await repo.insertDocument(req.body);
-    res.status(200).send(item);
+    const id: string = await repo.insertDocument(req.body);
+    res.status(200).send({id});
   } catch (e) {
     res.status(404).send(e.message);
   }
@@ -41,7 +41,7 @@ ShoppingCartRouter.patch("/", async (req: Request, res: Response) => {
     const paymentMethod: PaymentMethod = req.body;
     const repo = new ShoppingCartRepository();
     const result: boolean = await repo.updateDocument(paymentMethod.id, paymentMethod );
-    res.status(200).send(result);
+    res.status(200).send({result});
   } catch (e) {
     res.status(404).send(e.message);
   }
